@@ -1,0 +1,24 @@
+{
+  "name": "humble desktop-full",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "options": [
+      "--pull=false"
+    ]
+  },
+  "runArgs": [
+    "--privileged",
+    "--network=host",
+    "--gpus=all"
+  ],
+  "containerEnv": {
+    "NVIDIA_VISIBLE_DEVICES": "all",
+    "NVIDIA_DRIVER_CAPABILITIES": "all"
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/${localWorkspaceFolderBasename},type=bind",
+  "workspaceFolder": "/${localWorkspaceFolderBasename}",
+  "mounts": [
+    "source=${localEnv:HOME}/.bash_history,target=/home/vscode/.bash_history,type=bind"
+  ],
+  "remoteUser": "vscode"
+}

@@ -1,0 +1,7 @@
+pkill -9 -f "gzserver|gzclient|rviz2|robot_state_publisher"
+rm -rf log build install
+colcon build --symlink-install
+source /opt/ros/humble/setup.bash
+source install/setup.bash
+sleep 3
+ros2 launch d1_550_bringup launch_sim.launch.py
