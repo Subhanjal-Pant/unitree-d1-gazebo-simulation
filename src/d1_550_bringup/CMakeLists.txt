@@ -25,10 +25,11 @@ endif()
 
 install(
   DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/launch/
-    ${CMAKE_CURRENT_SOURCE_DIR}/rviz/
+    launch
+    rviz
   DESTINATION share/${PROJECT_NAME}
 )
+
 
 
 ament_package()

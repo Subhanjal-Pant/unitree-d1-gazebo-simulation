@@ -1,6 +1,7 @@
 import os
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.actions import LogInfo, OpaqueFunction
 from ament_index_python.packages import get_package_share_directory
 
 
@@ -12,8 +13,14 @@ def generate_launch_description():
     with open(urdf_path, 'r') as f:
         robot_description = f.read()
 
-    rviz_config = os.path.join(bringup_share, 'rviz', 'display.rviz')
-     
+    rviz_config = os.path.join(bringup_share, 'rviz', 'default_settings.rviz')
+    # print(f"[DEBUG] RViz config path: {rviz_config}")
+    # print(f"[DEBUG] Config exists: {os.path.isfile(rviz_config)}")
+
+    # if not os.path.isfile(rviz_config):
+    #     raise FileNotFoundError(
+    #         f"RViz config file is missing: {rviz_config}"
+    # )
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
