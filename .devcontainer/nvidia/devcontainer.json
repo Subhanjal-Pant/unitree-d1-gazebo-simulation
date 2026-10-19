@@ -1,0 +1,23 @@
+{
+  "name": "D1-550 ROS 2 Humble (NVIDIA GPU)",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  },
+  "runArgs": [
+    "--network=host",
+    "--gpus=all"
+  ],
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "NVIDIA_VISIBLE_DEVICES": "all",
+    "NVIDIA_DRIVER_CAPABILITIES": "all",
+    "__NV_PRIME_RENDER_OFFLOAD": "1",
+    "__GLX_VENDOR_LIBRARY_NAME": "nvidia"
+  },
+  "mounts": [
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
+  ],
+  "remoteUser": "vscode",
+  "postCreateCommand": "bash -c 'source /opt/ros/humble/setup.bash && colcon build --symlink-install'"
+}

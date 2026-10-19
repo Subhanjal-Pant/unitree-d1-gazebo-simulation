@@ -1,6 +1,6 @@
 FROM osrf/ros:humble-desktop-full
 
-# Set environment to avoid interactive prompts
+# Avoid interactive prompts during apt installs
 ENV DEBIAN_FRONTEND=noninteractive
 
 ARG USERNAME=vscode
@@ -20,6 +20,7 @@ RUN if ! id -u $USER_UID >/dev/null 2>&1; then \
         xterm \
         x11-apps \
         bash-completion \
+        python3-colcon-common-extensions \
         ros-humble-gazebo-ros-pkgs \
         ros-humble-robot-state-publisher \
         ros-humble-joint-state-publisher \
@@ -50,14 +51,10 @@ WORKDIR /home/$USERNAME
 # Add user to video group
 RUN sudo usermod --append --groups video $USERNAME
 
-# Rosdep update and sourcing
+# Rosdep update and shell setup
 RUN rosdep update \
-    && echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+    && echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc \
+    && echo "[ -f /usr/share/gazebo/setup.sh ] && source /usr/share/gazebo/setup.sh" >> ~/.bashrc
 
-RUN echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc
-
-# Render Gazebo and RViz on the NVIDIA GPU (the Intel graphics chip is much slower)
-ENV __NV_PRIME_RENDER_OFFLOAD=1
-ENV __GLX_VENDOR_LIBRARY_NAME=nvidia
-
+# Stops Gazebo from trying to reach its online model database at startup
 ENV GAZEBO_MODEL_DATABASE_URI=""
