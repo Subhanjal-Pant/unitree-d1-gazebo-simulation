@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="d1_550">
+
+  <xacro:include filename="$(find d1_550_description)/urdf/d1_550_description.urdf"/>
+
+  <link name="world"/>
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <xacro:macro name="joint_if" params="name">
+    <joint name="${name}">
+      <command_interface name="position"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+  </xacro:macro>
+
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <xacro:joint_if name="Joint1"/>
+    <xacro:joint_if name="Joint2"/>
+    <xacro:joint_if name="Joint3"/>
+    <xacro:joint_if name="Joint4"/>
+    <xacro:joint_if name="Joint5"/>
+    <xacro:joint_if name="Joint6"/>
+    <xacro:joint_if name="Joint_L"/>
+    <xacro:joint_if name="Joint_R"/>
+  </ros2_control>
+
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <parameters>$(find d1_550_bringup)/config/controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>

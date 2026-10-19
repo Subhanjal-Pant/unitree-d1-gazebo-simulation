@@ -4,4 +4,6 @@ colcon build --symlink-install
 source /opt/ros/humble/setup.bash
 source install/setup.bash
 sleep 3
+ros2 launch d1_550_bringup gazebo.launch.py
+
 ros2 launch d1_550_bringup launch_sim.launch.py
