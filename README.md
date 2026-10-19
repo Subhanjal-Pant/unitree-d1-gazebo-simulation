@@ -53,7 +53,12 @@ Left-right sweep, up and down, wrist rotations, several combined poses, returnin
 ```
   pkill -9 -f "gzserver|gzclient"
 ```
-  In Gazebo, `ground_plane` and `d1_550` should be listed under Models, and Lights should contain `sun`.
+- In Gazebo, `ground_plane` and `d1_550` should be listed under Models, and Lights should contain `sun`.
+
+- **Arm flickers, or you see `TF_OLD_DATA` warnings:** another ROS 2 system on the same network can interfere. The container sets `ROS_LOCALHOST_ONLY=1` to prevent this.
+  
+- In a native (non-Docker) install, run `export ROS_LOCALHOST_ONLY=1` before launching.
+  
 - **Slow first start:** Gazebo can take a minute or two on the first launch.
 
 ## Known limitations

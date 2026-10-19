@@ -58,3 +58,5 @@ RUN rosdep update \
 
 # Stops Gazebo from trying to reach its online model database at startup
 ENV GAZEBO_MODEL_DATABASE_URI=""
+# Keep ROS 2 traffic inside this machine so other ROS 2 systems on the network can't interfere
+ENV ROS_LOCALHOST_ONLY=1
