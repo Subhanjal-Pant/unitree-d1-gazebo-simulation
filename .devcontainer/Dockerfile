@@ -54,6 +54,8 @@ RUN sudo usermod --append --groups video $USERNAME
 RUN rosdep update \
     && echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
+RUN echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc
+
 # Render Gazebo and RViz on the NVIDIA GPU (the Intel graphics chip is much slower)
 ENV __NV_PRIME_RENDER_OFFLOAD=1
 ENV __GLX_VENDOR_LIBRARY_NAME=nvidia

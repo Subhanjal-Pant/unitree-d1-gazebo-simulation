@@ -1,12 +1,12 @@
 import os
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, RegisterEventHandler
+from launch.actions import IncludeLaunchDescription, RegisterEventHandler, SetEnvironmentVariable
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import get_package_prefix, get_package_share_directory
 
 
 def generate_launch_description():
@@ -15,6 +15,12 @@ def generate_launch_description():
 
     xacro_file = os.path.join(bringup_share, 'urdf', 'd1_550_gazebo.urdf.xacro')
     robot_description = ParameterValue(Command(['xacro ', xacro_file]), value_type=str)
+
+    model_path = os.path.join(get_package_prefix('d1_550_description'), 'share')
+    set_model_path = SetEnvironmentVariable(
+        'GAZEBO_MODEL_PATH',
+        model_path + ':/usr/share/gazebo-11/models')
+
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -53,6 +59,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        set_model_path,
         gazebo,
         robot_state_publisher,
         spawn_entity,
