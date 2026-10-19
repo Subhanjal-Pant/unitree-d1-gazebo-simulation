@@ -4,7 +4,7 @@
 #include <thread>
 #include <utility>
 #include <vector>
-
+#include <map>
 #include <rclcpp/rclcpp.hpp>
 #include <moveit/move_group_interface/move_group_interface.h>
 
@@ -14,8 +14,8 @@ using Joints = std::vector<double>;                    // Joint1..Joint6 in radi
 using Waypoint = std::pair<std::string, Joints>;
 
 static const char* HOME_POSE = "home";
-static const char* GRIPPER_OPEN = "open";      // change if your SRDF names differ
-static const char* GRIPPER_CLOSED = "closed";
+static const double GRIPPER_OPEN_POS = 0.0;      // fingers apart
+static const double GRIPPER_CLOSED_POS = 0.025;  // fingers together (limit is 0.033)
 
 struct Demo
 {
@@ -56,6 +56,16 @@ struct Demo
       return false;
     }
     return execute(arm, label);
+  }
+    bool grip(const std::string& label, double position)
+  {
+    std::map<std::string, double> target{{"Joint_L", position}, {"Joint_R", position}};
+    if (!gripper.setJointValueTarget(target)) {
+      ++failures;
+      RCLCPP_WARN(log, "Gripper target outside joint limits: %s", label.c_str());
+      return false;
+    }
+    return execute(gripper, label);
   }
 
   void sequence(const std::string& title, const std::vector<Waypoint>& waypoints)
@@ -132,9 +142,9 @@ int main(int argc, char** argv)
   // 5. Back at home: close and open the fingers twice
   RCLCPP_INFO(node->get_logger(), "=== Gripper ===");
   for (int i = 0; i < 2; ++i) {
-    demo.named(gripper, GRIPPER_CLOSED);
+    demo.grip("close gripper", GRIPPER_CLOSED_POS);
     demo.pause(500);
-    demo.named(gripper, GRIPPER_OPEN);
+    demo.grip("open gripper", GRIPPER_OPEN_POS);
     demo.pause(500);
   }
 
