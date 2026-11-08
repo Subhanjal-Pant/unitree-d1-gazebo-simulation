@@ -7,3 +7,12 @@ sleep 3
 ros2 launch d1_550_moveit_config full_sim.launch.py
 
 ros2 launch d1_550_demo demo.launch.py
+
+colcon build --packages-select d1_550_description d1_550_moveit_config --symlink-install
+
+
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "{joint_names: [Joint1, Joint2, Joint3, Joint4, Joint5, Joint6], points: [{positions: [0.0, 0.855, -0.227, 0.0, 1.100, 0.0], time_from_start: {sec: 5}}]}"
+
+
+New position
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "{joint_names: [Joint1, Joint2, Joint3, Joint4, Joint5, Joint6], points: [{positions: [0.0, 0.605, -0.227, 0.0, 1.350, 0.0], time_from_start: {sec: 5}}]}"

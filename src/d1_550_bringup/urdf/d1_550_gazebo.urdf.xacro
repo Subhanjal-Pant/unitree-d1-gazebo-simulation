@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="d1_550">
 
-  <xacro:include filename="$(find d1_550_description)/urdf/d1_550_description.urdf"/>
+  <xacro:include filename="$(find d1_550_description)/urdf/d1_550_description.urdf.xacro"/>
 
   <link name="world"/>
   <joint name="world_to_base" type="fixed">
@@ -39,5 +39,23 @@
       <parameters>$(find d1_550_bringup)/config/controllers.yaml</parameters>
     </plugin>
   </gazebo>
+  
+  <gazebo reference="Empty_Link_L">
+    <mu1>5.0</mu1>
+    <mu2>5.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.0</maxVel>
+  </gazebo>
+
+<gazebo reference="Empty_Link_R">
+  <mu1>5.0</mu1>
+  <mu2>5.0</mu2>
+  <kp>1000000.0</kp>
+  <kd>1.0</kd>
+  <minDepth>0.001</minDepth>
+  <maxVel>0.0</maxVel>
+</gazebo>
 
 </robot>

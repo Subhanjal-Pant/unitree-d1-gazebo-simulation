@@ -508,4 +508,5 @@
       effort="15"
       velocity="0.02" />
   </joint>
+  
 </robot>

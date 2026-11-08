@@ -12,6 +12,7 @@ from ament_index_python.packages import get_package_prefix, get_package_share_di
 def generate_launch_description():
     bringup_share = get_package_share_directory('d1_550_bringup')
     gazebo_share = get_package_share_directory('gazebo_ros')
+    world_file = os.path.join(bringup_share, 'worlds', 'pick_place.world')
 
     xacro_file = os.path.join(bringup_share, 'urdf', 'd1_550_gazebo.urdf.xacro')
     robot_description = ParameterValue(Command(['xacro ', xacro_file]), value_type=str)
@@ -25,7 +26,8 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(gazebo_share, 'launch', 'gazebo.launch.py')
-        )
+        ),
+        launch_arguments={'world': world_file}.items(),
     )
 
     robot_state_publisher = Node(
