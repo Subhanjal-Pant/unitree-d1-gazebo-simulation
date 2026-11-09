@@ -4,3 +4,4 @@ log/
 .venv/
 .cache/imp.txt
 imp.txt
+temp/
