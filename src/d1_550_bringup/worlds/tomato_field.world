@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<sdf version='1.7'>
+  <!--
+    Bench world. Table top height H = 0.20 m.
+    The arm base must ALSO be at z = 0.20 (world->base fixed joint in
+    d1_550_gazebo.urdf.xacro), otherwise it sits inside the table.
+  -->
+  <world name='default'>
+
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <surface><friction><ode><mu>100</mu><mu2>50</mu2></ode></friction></surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <material><ambient>0.45 0.45 0.45 1</ambient><diffuse>0.45 0.45 0.45 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <gravity>0 0 -9.8</gravity>
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.55 0.75 0.95 1</background>
+      <shadows>1</shadows>
+    </scene>
+
+    <!-- PICK TABLE: x -0.12..0.80, y -0.25..0.25. Arm base goes near its x=0 edge. -->
+    <model name='pick_table'>
+      <static>1</static>
+      <pose>0.6 0.0 0 0 0 0</pose>
+      <link name='link'>
+        <collision name='top_c'>
+          <pose>0 0 0.18 0 0 0</pose>
+          <geometry><box><size>0.92 0.5 0.04</size></box></geometry>
+          <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface>
+        </collision>
+        <visual name='top_v'>
+          <pose>0 0 0.18 0 0 0</pose>
+          <geometry><box><size>0.92 0.5 0.04</size></box></geometry>
+          <material><ambient>0.55 0.42 0.28 1</ambient><diffuse>0.55 0.42 0.28 1</diffuse></material>
+        </visual>
+        <collision name='leg1_c'><pose>0.42 0.21 0.09 0 0 0</pose><geometry><box><size>0.05 0.05 0.18</size></box></geometry></collision>
+        <visual name='leg1_v'><pose>0.42 0.21 0.09 0 0 0</pose><geometry><box><size>0.05 0.05 0.18</size></box></geometry><material><ambient>0.4 0.3 0.2 1</ambient><diffuse>0.4 0.3 0.2 1</diffuse></material></visual>
+        <collision name='leg2_c'><pose>-0.42 0.21 0.09 0 0 0</pose><geometry><box><size>0.05 0.05 0.18</size></box></geometry></collision>
+        <visual name='leg2_v'><pose>-0.42 0.21 0.09 0 0 0</pose><geometry><box><size>0.05 0.05 0.18</size></box></geometry><material><ambient>0.4 0.3 0.2 1</ambient><diffuse>0.4 0.3 0.2 1</diffuse></material></visual>
+        <collision name='leg3_c'><pose>0.42 -0.21 0.09 0 0 0</pose><geometry><box><size>0.05 0.05 0.18</size></box></geometry></collision>
+        <visual name='leg3_v'><pose>0.42 -0.21 0.09 0 0 0</pose><geometry><box><size>0.05 0.05 0.18</size></box></geometry><material><ambient>0.4 0.3 0.2 1</ambient><diffuse>0.4 0.3 0.2 1</diffuse></material></visual>
+        <collision name='leg4_c'><pose>-0.42 -0.21 0.09 0 0 0</pose><geometry><box><size>0.05 0.05 0.18</size></box></geometry></collision>
+        <visual name='leg4_v'><pose>-0.42 -0.21 0.09 0 0 0</pose><geometry><box><size>0.05 0.05 0.18</size></box></geometry><material><ambient>0.4 0.3 0.2 1</ambient><diffuse>0.4 0.3 0.2 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- PLACE TABLE: x 0.02..0.38, y -0.51..-0.25 (touches the pick table edge) -->
+    <model name='place_table'>
+      <static>1</static>
+      <pose>0.40 -0.38 0 0 0 0</pose>
+      <link name='link'>
+        <collision name='top_c'>
+          <pose>0 0 0.18 0 0 0</pose>
+          <geometry><box><size>0.36 0.26 0.04</size></box></geometry>
+        </collision>
+        <visual name='top_v'>
+          <pose>0 0 0.18 0 0 0</pose>
+          <geometry><box><size>0.36 0.26 0.04</size></box></geometry>
+          <material><ambient>0.55 0.42 0.28 1</ambient><diffuse>0.55 0.42 0.28 1</diffuse></material>
+        </visual>
+        <collision name='leg1_c'><pose>0.15 0.10 0.09 0 0 0</pose><geometry><box><size>0.04 0.04 0.18</size></box></geometry></collision>
+        <visual name='leg1_v'><pose>0.15 0.10 0.09 0 0 0</pose><geometry><box><size>0.04 0.04 0.18</size></box></geometry><material><ambient>0.4 0.3 0.2 1</ambient><diffuse>0.4 0.3 0.2 1</diffuse></material></visual>
+        <collision name='leg2_c'><pose>-0.15 0.10 0.09 0 0 0</pose><geometry><box><size>0.04 0.04 0.18</size></box></geometry></collision>
+        <visual name='leg2_v'><pose>-0.15 0.10 0.09 0 0 0</pose><geometry><box><size>0.04 0.04 0.18</size></box></geometry><material><ambient>0.4 0.3 0.2 1</ambient><diffuse>0.4 0.3 0.2 1</diffuse></material></visual>
+        <collision name='leg3_c'><pose>0.15 -0.10 0.09 0 0 0</pose><geometry><box><size>0.04 0.04 0.18</size></box></geometry></collision>
+        <visual name='leg3_v'><pose>0.15 -0.10 0.09 0 0 0</pose><geometry><box><size>0.04 0.04 0.18</size></box></geometry><material><ambient>0.4 0.3 0.2 1</ambient><diffuse>0.4 0.3 0.2 1</diffuse></material></visual>
+        <collision name='leg4_c'><pose>-0.15 -0.10 0.09 0 0 0</pose><geometry><box><size>0.04 0.04 0.18</size></box></geometry></collision>
+        <visual name='leg4_v'><pose>-0.15 -0.10 0.09 0 0 0</pose><geometry><box><size>0.04 0.04 0.18</size></box></geometry><material><ambient>0.4 0.3 0.2 1</ambient><diffuse>0.4 0.3 0.2 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- Harvest crate on the place table -->
+    <model name='harvest_crate'>
+      <static>1</static>
+      <pose>0.40 -0.38 0.20 0 0 0</pose>
+      <link name='link'>
+        <collision name='floor_c'><pose>0 0 0.005 0 0 0</pose><geometry><box><size>0.20 0.20 0.01</size></box></geometry></collision>
+        <visual name='floor_v'><pose>0 0 0.005 0 0 0</pose><geometry><box><size>0.20 0.20 0.01</size></box></geometry><material><ambient>0.65 0.45 0.25 1</ambient><diffuse>0.65 0.45 0.25 1</diffuse></material></visual>
+        <collision name='wall_n_c'><pose>0.095 0 0.03 0 0 0</pose><geometry><box><size>0.01 0.20 0.06</size></box></geometry></collision>
+        <visual name='wall_n_v'><pose>0.095 0 0.03 0 0 0</pose><geometry><box><size>0.01 0.20 0.06</size></box></geometry><material><ambient>0.65 0.45 0.25 1</ambient><diffuse>0.65 0.45 0.25 1</diffuse></material></visual>
+        <collision name='wall_s_c'><pose>-0.095 0 0.03 0 0 0</pose><geometry><box><size>0.01 0.20 0.06</size></box></geometry></collision>
+        <visual name='wall_s_v'><pose>-0.095 0 0.03 0 0 0</pose><geometry><box><size>0.01 0.20 0.06</size></box></geometry><material><ambient>0.65 0.45 0.25 1</ambient><diffuse>0.65 0.45 0.25 1</diffuse></material></visual>
+        <collision name='wall_e_c'><pose>0 0.095 0.03 0 0 0</pose><geometry><box><size>0.20 0.01 0.06</size></box></geometry></collision>
+        <visual name='wall_e_v'><pose>0 0.095 0.03 0 0 0</pose><geometry><box><size>0.20 0.01 0.06</size></box></geometry><material><ambient>0.65 0.45 0.25 1</ambient><diffuse>0.65 0.45 0.25 1</diffuse></material></visual>
+        <collision name='wall_w_c'><pose>0 -0.095 0.03 0 0 0</pose><geometry><box><size>0.20 0.01 0.06</size></box></geometry></collision>
+        <visual name='wall_w_v'><pose>0 -0.095 0.03 0 0 0</pose><geometry><box><size>0.20 0.01 0.06</size></box></geometry><material><ambient>0.65 0.45 0.25 1</ambient><diffuse>0.65 0.45 0.25 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- TARGET: ripe tomato (only red object). Resting on the pick table top (z=0.20). -->
+    <model name='tomato_ripe'>
+      <pose>0.35 0 0.236 0 0 0</pose>
+      <link name='link'>
+        <velocity_decay><linear>0.1</linear><angular>1.0</angular></velocity_decay>
+        <inertial>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>4.9e-5</ixx><iyy>4.9e-5</iyy><izz>4.9e-5</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry><sphere><radius>0.02</radius></sphere></geometry>
+          <surface><friction><ode><mu>1.5</mu><mu2>1.5</mu2></ode></friction></surface>
+        </collision>
+        <visual name='visual'>
+          <geometry><sphere><radius>0.035</radius></sphere></geometry>
+          <material><ambient>1 0 0 1</ambient><diffuse>1 0 0 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- DISTRACTORS: unripe green tomatoes -->
+    <model name='tomato_unripe_1'>
+      <pose>0.38 0.13 0.231 0 0 0</pose>
+      <link name='link'>
+        <velocity_decay><linear>0.1</linear><angular>1.0</angular></velocity_decay>
+        <inertial>
+          <mass>0.08</mass>
+          <inertia>
+            <ixx>2.5e-5</ixx><iyy>2.5e-5</iyy><izz>2.5e-5</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <collision name='collision'><geometry><sphere><radius>0.03</radius></sphere></geometry></collision>
+        <visual name='visual'>
+          <geometry><sphere><radius>0.03</radius></sphere></geometry>
+          <material><ambient>0.45 0.7 0.2 1</ambient><diffuse>0.45 0.7 0.2 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='tomato_unripe_2'>
+      <pose>0.33 -0.14 0.231 0 0 0</pose>
+      <link name='link'>
+        <velocity_decay><linear>0.1</linear><angular>1.0</angular></velocity_decay>
+        <inertial>
+          <mass>0.08</mass>
+          <inertia>
+            <ixx>2.5e-5</ixx><iyy>2.5e-5</iyy><izz>2.5e-5</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <collision name='collision'><geometry><sphere><radius>0.03</radius></sphere></geometry></collision>
+        <visual name='visual'>
+          <geometry><sphere><radius>0.03</radius></sphere></geometry>
+          <material><ambient>0.45 0.7 0.2 1</ambient><diffuse>0.45 0.7 0.2 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>0.9 -0.8 0.7 0 0.5 2.4</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+
+    <plugin name="gazebo_link_attacher" filename="libgazebo_link_attacher.so"/>
+
+  </world>
+</sdf>
