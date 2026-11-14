@@ -19,12 +19,11 @@ class RedObjectDetector(Node):
         self.declare_parameter('target_frame', 'world')
         self.declare_parameter('min_pixels', 50)
         # Depth gives the nearest visible surface, not the object's centre.
-        # For a 4 cm cube on the table, the centre is ~2 cm below the top face.
-        self.declare_parameter('z_offset', -0.02)
+        self.declare_parameter('object_radius', 0.02)
+        self.object_radius = self.get_parameter('object_radius').value
 
         self.target_frame = self.get_parameter('target_frame').value
         self.min_pixels = self.get_parameter('min_pixels').value
-        self.z_offset = self.get_parameter('z_offset').value
 
         self.bridge = CvBridge()
         self.depth = None
@@ -70,15 +69,16 @@ class RedObjectDetector(Node):
         d = d[np.isfinite(d)]
         if d.size == 0:
             return
-        z = float(np.median(d))
+        z = float(np.percentile(d, 10))   # near surface; robust to edge pixels
+        zc = z + self.object_radius       # sphere centre, along the camera's viewing axis
 
         # 3. Pixel + depth -> 3D point in the camera optical frame
         fx, fy, cx, cy = self.K
         p = PointStamped()
         p.header.frame_id = msg.header.frame_id  # camera_optical_frame
-        p.point.x = (u - cx) * z / fx
-        p.point.y = (v - cy) * z / fy
-        p.point.z = z
+        p.point.x = (u - cx) * zc / fx
+        p.point.y = (v - cy) * zc / fy
+        p.point.z = zc
 
         # 4. Camera frame -> target frame (latest available transform)
         try:
@@ -89,7 +89,6 @@ class RedObjectDetector(Node):
                                    throttle_duration_sec=2.0)
             return
 
-        out.point.z += self.z_offset
         self.pub.publish(out)
         self.get_logger().info(
             f'object at ({out.point.x:.3f}, {out.point.y:.3f}, {out.point.z:.3f}) '
